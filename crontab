@@ -1,0 +1,3 @@
+#CO2
+@reboot /home/pi/CO2.sh
+*/10 *  *   *   *     /home/pi/CO2.sh
