@@ -82,7 +82,7 @@ def get_speed():
                 X+=1
                 #print('Preset speed: ',Received[X])
                 if Received[X] != 4:
-                    return (22+(Received[X]-1)*((255-22)/2))
+                    return (22+(Received[X]-1)*((255-22)//2))
             elif SW == 5:
                 X+=1
                 #print('Manual speed: ',Received[X])
