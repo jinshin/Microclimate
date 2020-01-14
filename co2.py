@@ -176,7 +176,8 @@ def time_func():
         return
     get_settings()
     #print (CO2_Level, Temp, Vent_Speed, Do_Control)
-    if Do_Control == 1:
+    if Do_Control == 1
+      change_speed(0)
       if CO2_Level > 1000 and CO2_Prev < CO2_Level:
         change_speed(12)
       elif CO2_Level < 750 and CO2_Prev >= CO2_Level:
