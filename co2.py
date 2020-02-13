@@ -13,7 +13,8 @@ Power_On = 0
 Do_Control = 0
 
 Night_Limit = 120
-Day_Limit = 250
+Day_Max = 255
+Day_Limit = 160
 
 Night_Start = datetime.time(23,0,0)
 Day_Start = datetime.time(9,0,0)
@@ -143,12 +144,15 @@ def change_speed(speed_val):
     global Vent_Speed
     global Night_Limit
     global Day_Limit
+    global CO2_Level
 
     Speed_Limit = 255
     if (is_night()):
        Speed_Limit = Night_Limit
     else:
        Speed_Limit = Day_Limit
+       if CO2_Level > 1300:
+          Speed_Limit = Day_Max
 
     Speed_Prev = Vent_Speed
     Vent_Speed = Vent_Speed + speed_val
@@ -176,15 +180,16 @@ def time_func():
         return
     get_settings()
     #print (CO2_Level, Temp, Vent_Speed, Do_Control)
-    if Do_Control == 1
+    if Do_Control == 1:
       change_speed(0)
-      if CO2_Level > 1000 and CO2_Prev < CO2_Level:
+      if CO2_Level > 950 and CO2_Prev < CO2_Level:
         change_speed(12)
-      elif CO2_Level < 750 and CO2_Prev >= CO2_Level:
+      #elif CO2_Level < 800 and CO2_Prev >= CO2_Level:
+      elif CO2_Level < 800:
         change_speed(-12)
-      if CO2_Level <= 650 and Vent_Speed == 22 and Power_On == 1:
+      if CO2_Level <= 650 and Vent_Speed == 22 and Power_On == 1 and not is_night():
         switch_power()
-      if CO2_Level > 800 and Power_On == 0:
+      if CO2_Level > 750 and Power_On == 0:
         switch_power()
     CO2_Prev = CO2_Level
     log_file = open("/var/log/co2", "a")
