@@ -39,6 +39,7 @@ for i in `tail -$loglines /var/log/co2`
 done
 
 echo "<html>"
+echo "<meta http-equiv=refresh content=120>"
 echo "<body bgcolor=black>"
 print_text_line "${adate[0]} ${adate[1]} -> ${adate[($loglines-1)*2]} ${adate[($loglines-1)*2+1]}" 3 gray
 
