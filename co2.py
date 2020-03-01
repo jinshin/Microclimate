@@ -11,6 +11,7 @@ Speed_Prev = Vent_Speed
 Temp = 0
 Power_On = 0
 Do_Control = 0
+RH = 50
 
 Night_Limit = 120
 Day_Max = 255
@@ -75,6 +76,10 @@ def get_speed():
     global VentoIP
     global VentoPort
     global Power_On
+    global RH
+
+    ReturnSpeed = 0
+
     Device = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     Device.settimeout(1)
     sendstr = bytes('mobile','cp1251')
@@ -100,13 +105,16 @@ def get_speed():
                 X+=1
                 #print('Preset speed: ',Received[X])
                 if Received[X] != 4:
-                    return (22+(Received[X]-1)*((255-22)//2))
+                    ReturnSpeed = (22+(Received[X]-1)*((255-22)//2))
             elif SW == 5:
                 X+=1
                 #print('Manual speed: ',Received[X])
-                return (Received[X])
+                ReturnSpeed = (Received[X])
+            elif SW == 8:
+                X+=1
+                RH = (Received[X])
             X+=1
-    return 0
+    return ReturnSpeed
 
 def get_settings():
     global VentoIP
@@ -193,7 +201,7 @@ def time_func():
         switch_power()
     CO2_Prev = CO2_Level
     log_file = open("/var/log/co2", "a")
-    log_file.write(time.strftime("%Y-%m-%d %H:%M")+" "+str(CO2_Level)+" "+str(Temp)+" "+str(Vent_Speed)+" "+str (Power_On)+"\r\n")
+    log_file.write(time.strftime("%Y-%m-%d %H:%M")+" "+str(CO2_Level)+" "+str(Temp)+" "+str(RH)+" "+str(Vent_Speed)+" "+str (Power_On)+"\r\n")
     log_file.close()
 
 CO2_Prev = get_co2()
