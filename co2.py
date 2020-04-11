@@ -1,4 +1,4 @@
-import serial, sched, time, socket, datetime
+import os,serial, sched, time, socket, datetime
 
 VentoIP = '192.168.0.20'
 VentoPort = 4000
@@ -200,6 +200,14 @@ def time_func():
       if CO2_Level > 750 and Power_On == 0:
         switch_power()
     CO2_Prev = CO2_Level
+    #set OS variable to communicate with other scripts
+    try:
+      co2file=open("/tmp/co2level", "w+")
+      co2file.write(str(CO2_Level))
+      co2file.close()
+    except:
+      print("Ahem.")
+    #write to log
     log_file = open("/var/log/co2", "a")
     log_file.write(time.strftime("%Y-%m-%d %H:%M")+" "+str(CO2_Level)+" "+str(Temp)+" "+str(RH)+" "+str(Vent_Speed)+" "+str (Power_On)+"\r\n")
     log_file.close()
