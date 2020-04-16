@@ -1,3 +1,11 @@
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
 #CO2
-@reboot /home/pi/CO2.sh
-*/10 *  *   *   *     /home/pi/CO2.sh
+@reboot /home/n0p/CO2.sh
+@reboot /home/n0p/BME.sh
+@reboot /home/n0p/GFX.sh
+*/4  *  *   *   *     /home/n0p/BME.sh
+*/13 *  *   *   *     /home/n0p/CO2.sh
+*/16 *  *   *   *     /home/n0p/GFX.sh
+*/1 *  *   *   *     /home/n0p/gen.sh > /var/www/index.html
