@@ -3,6 +3,8 @@ import os,serial, sched, time, socket, datetime
 VentoIP = '192.168.0.20'
 VentoPort = 4000
 
+logfile = "/var/log/co2"
+
 #Min
 CO2_Level = 400
 Vent_Speed = 22
@@ -73,10 +75,7 @@ def switch_power():
     Device.close()
 
 def get_speed():
-    global VentoIP
-    global VentoPort
-    global Power_On
-    global RH
+    global VentoIP, VentoPort, Power_On, RH
 
     ReturnSpeed = 0
 
@@ -117,9 +116,7 @@ def get_speed():
     return ReturnSpeed
 
 def get_settings():
-    global VentoIP
-    global VentoPort
-    global Do_Control
+    global VentoIP, VentoPort, Do_Control
     Device = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     Device.settimeout(1)
     sendstr = bytes('mobile','cp1251')
@@ -148,11 +145,7 @@ CO2_Prev = 0
 Speed_Prev = 0
 
 def change_speed(speed_val):
-    global Speed_Prev
-    global Vent_Speed
-    global Night_Limit
-    global Day_Limit
-    global CO2_Level
+    global Speed_Prev, Vent_Speed, Night_Limit, Day_Limit, CO2_Level
 
     Speed_Limit = 255
     if (is_night()):
@@ -173,12 +166,7 @@ def change_speed(speed_val):
        set_speed(Vent_Speed)
 
 def time_func():
-    global CO2_Level
-    global Vent_Speed
-    global CO2_Prev
-    global Speed_Prev
-    global Night_LImit
-    global Day_Limit
+    global CO2_Level, Vent_Speed, CO2_Prev, Speed_Prev, Night_LImit, Day_Limit, logfile
     s.enter(60, 1, time_func, ())
     CO2_Level = get_co2()
     if CO2_Level == 0:
@@ -200,7 +188,7 @@ def time_func():
       if CO2_Level > 750 and Power_On == 0:
         switch_power()
     CO2_Prev = CO2_Level
-    #set OS variable to communicate with other scripts
+    #write value to temp file to communicate with other scripts
     try:
       co2file=open("/tmp/co2level", "w+")
       co2file.write(str(CO2_Level))
@@ -208,8 +196,8 @@ def time_func():
     except:
       print("Ahem.")
     #write to log
-    log_file = open("/var/log/co2", "a")
-    log_file.write(time.strftime("%Y-%m-%d %H:%M")+" "+str(CO2_Level)+" "+str(Temp)+" "+str(RH)+" "+str(Vent_Speed)+" "+str (Power_On)+"\r\n")
+    log_file = open(logfile, "a")
+    log_file.write(time.strftime("%Y-%m-%d %H:%M")+" "+str(CO2_Level)+" "+str(Temp)+" "+str(RH)+" "+str(Vent_Speed)+" "+str (Power_On)+"\n")
     log_file.close()
 
 CO2_Prev = get_co2()
