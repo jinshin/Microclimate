@@ -4,6 +4,7 @@ VentoIP = '192.168.0.20'
 VentoPort = 4000
 
 logfile = "/var/log/co2"
+novent  = "/tmp/VENTOFF"
 
 #Min
 CO2_Level = 400
@@ -165,8 +166,23 @@ def change_speed(speed_val):
     if Vent_Speed != Speed_Prev:
        set_speed(Vent_Speed)
 
+def log_data():
+    global Temp, CO2_Level, Vent_Speed, CO2_Prev, Speed_Prev, Night_LImit, Day_Limit, logfile
+    #write value to temp file to communicate with other scripts
+    try:
+      co2file=open("/tmp/co2level", "w+")
+      co2file.write(str(CO2_Level))
+      co2file.close()
+    except:
+      print("Ahem.")
+    #write to log
+    log_file = open(logfile, "a")
+    log_file.write(time.strftime("%Y-%m-%d %H:%M")+" "+str(CO2_Level)+" "+str(Temp)+" "+str(RH)+" "+str(Vent_Speed)+" "+str (Power_On)+"\n")
+    log_file.close()
+
+
 def time_func():
-    global CO2_Level, Vent_Speed, CO2_Prev, Speed_Prev, Night_LImit, Day_Limit, logfile
+    global Temp, CO2_Level, Vent_Speed, CO2_Prev, Speed_Prev, Night_LImit, Day_Limit, logfile
     s.enter(60, 1, time_func, ())
     CO2_Level = get_co2()
     if CO2_Level == 0:
@@ -174,6 +190,13 @@ def time_func():
     Vent_Speed = get_speed()
     if Vent_Speed == 0:
         return
+
+    if (os.path.isfile(novent)):
+      if Power_On == 1:
+        switch_power()
+      log_data()
+      return
+
     get_settings()
     #print (CO2_Level, Temp, Vent_Speed, Do_Control)
     if Do_Control == 1:
@@ -188,17 +211,8 @@ def time_func():
       if CO2_Level > 750 and Power_On == 0:
         switch_power()
     CO2_Prev = CO2_Level
-    #write value to temp file to communicate with other scripts
-    try:
-      co2file=open("/tmp/co2level", "w+")
-      co2file.write(str(CO2_Level))
-      co2file.close()
-    except:
-      print("Ahem.")
-    #write to log
-    log_file = open(logfile, "a")
-    log_file.write(time.strftime("%Y-%m-%d %H:%M")+" "+str(CO2_Level)+" "+str(Temp)+" "+str(RH)+" "+str(Vent_Speed)+" "+str (Power_On)+"\n")
-    log_file.close()
+
+    log_data()
 
 CO2_Prev = get_co2()
 Speed_Prev = get_speed()
