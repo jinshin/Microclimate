@@ -2,6 +2,12 @@ import sched, time, datetime, pickle, random
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+tph_file = "/tmp/tph"
+co2_file = "/tmp/co2level"
+pkl_file = "/tmp/plot.pkl"
+pkl_file_const = "/var/cache/plot.pkl"
+save_counter = 0
+
 dt_list = []
 t_list = []
 p_list = []
@@ -12,31 +18,33 @@ ax = 0
 
 def time_func():
   global dt_list, t_list, p_list, h_list, co2_list
+  global tph_file, co2_file, pkl_file, pkl_file_const, save_counter
   s.enter(300, 1, time_func, ())
   cdate=datetime.datetime.now()
   data="0,0,0,0"
   co2=800
   #Get TPH
   try:
-    tphfile=open("/tmp/tph","r")
+    tphfile=open(tph_file,"r")
     data=tphfile.read()
     tphfile.close()
+    cdate,t,p,h=map(float,data.split(","))
+    cdate=datetime.datetime.fromtimestamp(cdate)
   except:
-    print ("No TPH Data")
-  cdate,t,p,h=map(float,data.split(","))
-
-  cdate=datetime.datetime.fromtimestamp(cdate)
-  #cdate=datetime.datetime.now()
+    t=20
+    p=985 #Earth avg from wiki
+    h=50
+    cdate=datetime.datetime.now()
 
   #print(cdate,t,p,h)
   #Get CO2
   #ToDo - add timestamp as well
   try:
-    tphfile=open("/tmp/co2level","r")
+    tphfile=open(co2_file,"r")
     co2=tphfile.read()
     tphfile.close()
   except:
-    print ("No CO2 Data")
+    co2=800
   #print(co2)
   MAXLEN=288
 
@@ -53,7 +61,7 @@ def time_func():
   #st=datetime.datetime.now()
   #dump data
   try:
-    pfile=open("/var/log/plot.pkl","wb+")
+    pfile=open(pkl_file,"wb+")
     pickle.dump(dt_list,pfile,-1)
     pickle.dump(t_list,pfile,-1)
     pickle.dump(p_list,pfile,-1)
@@ -62,6 +70,20 @@ def time_func():
     pfile.close()
   except:
     print("Cannot pickle data")
+
+  save_counter+=1
+  if (save_counter % 12) == 0:
+    save_counter = 0
+    try:
+      pfile=open(pkl_file_const,"wb+")
+      pickle.dump(dt_list,pfile,-1)
+      pickle.dump(t_list,pfile,-1)
+      pickle.dump(p_list,pfile,-1)
+      pickle.dump(h_list,pfile,-1)
+      pickle.dump(co2_list,pfile,-1)
+      pfile.close()
+    except:
+      print("Cannot pickle data")
 
   global fig, ax
   ax.plot(dt_list, t_list)
@@ -111,7 +133,7 @@ def time_func():
 #------------------
 #Restore data
 try:
-  pfile=open("/var/log/plot.pkl","rb")
+  pfile=open(pkl_file,"rb")
   dt_list=pickle.load(pfile)
   t_list=pickle.load(pfile)
   p_list=pickle.load(pfile)
@@ -119,7 +141,16 @@ try:
   co2_list=pickle.load(pfile)
   pfile.close()
 except:
-  print("Cannot load pickled data")
+  try:
+    pfile=open(pkl_file_const,"rb")
+    dt_list=pickle.load(pfile)
+    t_list=pickle.load(pfile)
+    p_list=pickle.load(pfile)
+    h_list=pickle.load(pfile)
+    co2_list=pickle.load(pfile)
+    pfile.close()
+  except:
+    print("Cannot load pickled data")
 
 plt.style.use('dark_background')
 fig, ax = plt.subplots()
