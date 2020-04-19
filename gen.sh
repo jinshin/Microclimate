@@ -167,6 +167,11 @@ echo '<td><form action="autodis.sh" method="POST"><INPUT TYPE="submit" VALUE="Di
 style="height:100px; width:300px;    font-size:30px; background-color:#F0F0A0; border-radius:25px; border:2px solid "white";" ></form></td>'
 echo '<td><form action="autoen.sh" method="POST"><INPUT TYPE="submit" VALUE="Enable Autocontrol"
 style="height:100px; width:300px;    font-size:30px; background-color:#A0A0F0; border-radius:25px; border:2px solid "white";" ></form></td>'
+echo "</tr><tr>"
+echo '<td><form action="ventoff.sh" method="POST"><INPUT TYPE="submit" VALUE="Stop Ventilation"
+style="height:100px; width:300px;    font-size:30px; background-color:#F0A0A0; border-radius:25px; border:2px solid "white";" ></form></td>'
+echo '<td><form action="venton.sh" method="POST"><INPUT TYPE="submit" VALUE="Start Ventilation"
+style="height:100px; width:300px;    font-size:30px; background-color:#A0F0A0; border-radius:25px; border:2px solid "white";" ></form></td>'
 echo "</tr></table>"
 
 echo "<br>"
