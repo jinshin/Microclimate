@@ -158,20 +158,21 @@ echo "<br>"
 echo "<br>"
 
 echo "<table cellspacing=10 cellpadding=5><tr>"
-echo '<td><form action="heaton.sh" method="POST"><INPUT TYPE="submit" VALUE="Run Heater" 
+echo '<td><form action="bin/heaton.sh" method="GET"><INPUT TYPE="submit" VALUE="Run Heater"
 style="height:100px; width:300px;    font-size:30px; background-color:#F0A0A0; border-radius:25px; border:2px solid "white";" ></form></td>'
-echo '<td><form action="heatoff.sh" method="POST"><INPUT TYPE="submit" VALUE="Stop Heater"
+echo '<td><form action="bin/heatoff.sh" method="GET"><INPUT TYPE="submit" VALUE="Stop Heater"
 style="height:100px; width:300px;  font-size:30px; background-color:#A0F0F0; border-radius:25px; border:2px solid "white";" ></form></td>'
 echo "</tr><tr>"
-echo '<td><form action="autodis.sh" method="POST"><INPUT TYPE="submit" VALUE="Disable Autocontrol"
+echo '<td><form action="bin/autodis.sh" method="GET"><INPUT TYPE="submit" VALUE="Disable Autocontrol"
 style="height:100px; width:300px;    font-size:30px; background-color:#F0F0A0; border-radius:25px; border:2px solid "white";" ></form></td>'
-echo '<td><form action="autoen.sh" method="POST"><INPUT TYPE="submit" VALUE="Enable Autocontrol"
+echo '<td><form action="bin/autoen.sh" method="GET"><INPUT TYPE="submit" VALUE="Enable Autocontrol"
 style="height:100px; width:300px;    font-size:30px; background-color:#A0A0F0; border-radius:25px; border:2px solid "white";" ></form></td>'
 echo "</tr><tr>"
-echo '<td><form action="ventoff.sh" method="POST"><INPUT TYPE="submit" VALUE="Stop Ventilation"
+echo '<td><form action="bin/ventoff.sh" method="GET"><INPUT TYPE="submit" VALUE="Stop Ventilation"
 style="height:100px; width:300px;    font-size:30px; background-color:#F0A0A0; border-radius:25px; border:2px solid "white";" ></form></td>'
-echo '<td><form action="venton.sh" method="POST"><INPUT TYPE="submit" VALUE="Start Ventilation"
-style="height:100px; width:300px;    font-size:30px; background-color:#A0F0A0; border-radius:25px; border:2px solid "white";" ></form></td>'
+echo '<td><form action="bin/venton.sh" method="GET"><INPUT TYPE="submit" VALUE="Start Ventilation"
+style="height:100px; width:300px;    font-size:30px; background-color:#A0F0A0; border-radius:25px; border:2px solid "white";" >
+</form></td>'
 echo "</tr></table>"
 
 echo "<br>"
