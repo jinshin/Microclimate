@@ -50,15 +50,45 @@ static char* get_mime_type( char* name );
 static void strdecode( char* to, char* from );
 static int hexit( char c );
 static void strencode( char* to, size_t tosize, const char* from );
+static void run_cmd(char* srv_path, char* path);
 
+static void run_cmd(char* srv_path, char* path)
+{
+    char script[10000];
+    char cmdbuf[200];
+    char output[20000];
+    FILE* fp;
+    int i;
+    char* c;
+    if (strncmp(path,"/bin/",5)==0) {
+		c=strchr(path,0x3F);
+		if (c != NULL) {
+			c[0]=0x20;
+			do {
+				c=strchr(c,0x26);
+				if (c != NULL) c[0]=0x20;
+			} while (c != NULL);
+		}
+		snprintf(output,sizeof(output),"%s","<br>");
+                snprintf(script,sizeof(script),"%s%s 2>&1",srv_path,path);
+                if ((fp = popen(script, "r")) == NULL) {
+                        snprintf(output,sizeof(output),"Error running command");
+                        send_error(404, "Error", (char*) 0 ,"Command not found");
+                } else {
+                        while (fgets(cmdbuf, sizeof(cmdbuf), fp) != NULL) {
+                          i=strlen(output);
+                          snprintf(output+i,sizeof(output)-i,"%s<br>", cmdbuf);
+                        }
+                        pclose(fp);
+                        send_error(200, "OK", (char*) 0 ,output);
+                }
+    }
+}
 
 int
 main( int argc, char** argv )
     {
     char line[10000], method[10000], path[10000], protocol[10000], idx[20000], location[20000];
-    char script[10000];
-    char cmdbuf[200];
-    char output[20000];
 
     char* file;
     size_t len;
@@ -74,33 +104,20 @@ main( int argc, char** argv )
 	send_error( 500, "Internal Error", (char*) 0, "Config error - couldn't chdir()." );
     if ( fgets( line, sizeof(line), stdin ) == (char*) 0 )
 	send_error( 400, "Bad Request", (char*) 0, "No request found." );
+
     if ( sscanf( line, "%[^ ] %[^ ] %[^ ]", method, path, protocol ) != 3 )
 	send_error( 400, "Bad Request", (char*) 0, "Can't parse request." );
+
+    if (strcasecmp(method,"get")==0)
     while ( fgets( line, sizeof(line), stdin ) != (char*) 0 )
 	{
 	if ( strcmp( line, "\n" ) == 0 || strcmp( line, "\r\n" ) == 0 )
 	    break;
-	}
+	};
 
-    if ( strcasecmp( method, "get" ) != 0 )
-        {
-        if (strcasecmp(method,"post") == 0)
-        {
-		snprintf(script,sizeof(script),"%s/bin/%s",argv[1],path);
-		if ((fp = popen(script, "r")) == NULL) {
-			snprintf(output,sizeof(output),"Error running command");
-			send_error(404, "Error", (char*) 0 ,"Command not found");
-		} else {
-			while (fgets(cmdbuf, sizeof(cmdbuf), fp) != NULL) {
-        		snprintf(output,sizeof(output),"%s\n%s", output, cmdbuf);
-			}
-			pclose(fp);
-                        send_error(200, "OK", (char*) 0 ,output);
-    		}
+    if ( strcasecmp( method, "get" ) != 0 ) send_error( 501, "Not Implemented", (char*) 0, "That method is not implemented." );
 
-        }
-	else send_error( 501, "Not Implemented", (char*) 0, "That method is not implemented." );
-    }
+    run_cmd(argv[1],path);
 
     if ( path[0] != '/' )
 	send_error( 400, "Bad Request", (char*) 0, "Bad filename." );
@@ -198,11 +215,11 @@ send_error( int status, char* title, char* extra_header, char* text )
     <meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\">\n\
     <title>%d %s</title>\n\
   </head>\n\
-  <body bgcolor=\"0\">\n\
+  <body bgcolor=\"#a0f0f0\">\n\
     <font size=7>%d %s</font>\n", status, title, status, title );
     (void) printf( "%s\n", text );
     (void) printf( "\
-    \n\
+    <hr>\n\
     <address><a href=\"%s\">%s</a></address>\n\
   </body>\n\
 </html>\n", SERVER_URL, SERVER_NAME );
