@@ -10,3 +10,9 @@ Now i have extended the system with BME280 sensor, heater control, and small htt
 
 More about heater control here:
 https://docs.google.com/document/d/1_drADWenzFtNRgrBaX9dGQfiQEofACiw6MladfzTkYg
+
+co2.py - Ventilation control. Reads CO2 level from Winsen MH-Z19b via serial and adjusts Blauberg fan speed via WiFi.
+bme280.py - Heater control. Reads data (temperature, pressure, relative humidity) from BME280 sensor via i2c and controls heater via 433Mhz transmitter and receiver relay. No WiFi here as it's pretty critical.
+plot.py - Graphs data.
+gen.sh - Generates web-page.
+micro-httpd.c - smallest http server. Not mine, i've just added basic GET form support. (/bin treated as a location with executables) 
