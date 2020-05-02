@@ -27,7 +27,7 @@ Min_Cycle = 10 #minutes heat minimum
 Force_Cycle = 30 #Run heater when forced
 
 heat_counter = 0
-heat_op = 1 #1 - start, 0 - stop
+heat_op = 2       #1 - start, 0 - stop, 2 - not needed
 
 Day_Temp_Max = 18.9
 Day_Temp_Min = 18.7
@@ -52,7 +52,7 @@ def is_winter():
   if Winter_Start <= Summer_Start:
     return Winter_Start <= Current_Date <= Summer_Start
   else:
-    return Winter_Start <= Current_Date or Current_Date <= Summer_Start
+    return Winter_Start <= Current_Date or Current_Date < Summer_Start
 
 def is_night():
   global Night_Start
@@ -171,10 +171,6 @@ last_op = -1
 op_count = 0
 
 def heater(on):
-
-  if not is_winter():
-    #print ("Summer time")
-    return
 
   #Signal send rate limiter
   global last_op, op_count
@@ -299,7 +295,13 @@ def time_func():
 
 #Exit if autocontrol disabled
   if (os.path.isfile(noauto)):
-    log_console("AutoControl is OFF")
+    #log_console("AutoControl is OFF")
+    log_data(t,p,h)
+    return
+
+#Exit if summer time
+  if (not is_winter()):
+    #log_console("Summer Time: AutoControl is OFF")
     log_data(t,p,h)
     return
 
