@@ -86,44 +86,44 @@ def time_func():
       print("Cannot pickle data")
 
   global fig, ax
-  ax.plot(dt_list, t_list)
+  ax.plot(dt_list, t_list, '#8DB600')
   ax.set(xlabel='', ylabel='Temperature, Celcius',
        title='Temperature: '+str(t)+'В°C' )
-  ax.grid()
+  ax.grid(color='gray', linestyle=':')
   ax.ticklabel_format(style='plain', useOffset=False, axis='y')
   fig.autofmt_xdate(rotation=45)
   ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
-  fig.savefig("/var/www/t.png")
+  fig.savefig("/var/www/t.png", dpi=130)
   plt.cla()
 
-  ax.plot(dt_list, p_list)
+  ax.plot(dt_list, p_list, '#00B68D')
   ax.set(xlabel='', ylabel='Pressure, hPa',
        title='Pressure: '+str(p)+' hPa')
   ax.grid()
   ax.ticklabel_format(style='plain', useOffset=False, axis='y')
   fig.autofmt_xdate(rotation=45)
   ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
-  fig.savefig("/var/www/p.png")
+  fig.savefig("/var/www/p.png", dpi=130)
   plt.cla()
 
-  ax.plot(dt_list, h_list)
+  ax.plot(dt_list, h_list, '#00A0D6')
   ax.set(xlabel='', ylabel='Relative Humidity, %',
        title='Relative humidity: '+str(h)+'%')
   ax.grid()
   ax.ticklabel_format(style='plain', useOffset=False, axis='y')
   fig.autofmt_xdate(rotation=45)
   ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
-  fig.savefig("/var/www/h.png")
+  fig.savefig("/var/www/h.png", dpi=130)
   plt.cla()
 
-  ax.plot(dt_list, co2_list)
+  ax.plot(dt_list, co2_list, '#8D60B6')
   ax.set(xlabel='', ylabel='CO2, ppm',
        title='CO2: '+str(co2))
   ax.grid()
   ax.ticklabel_format(style='plain', useOffset=False, axis='y')
   ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
   fig.autofmt_xdate(rotation=45)
-  fig.savefig("/var/www/co2.png")
+  fig.savefig("/var/www/co2.png", dpi=130)
   plt.cla()
 
   #print(datetime.datetime.now()-st)
