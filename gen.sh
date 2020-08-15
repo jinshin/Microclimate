@@ -163,9 +163,9 @@ style="height:100px; width:300px;    font-size:30px; background-color:#F0A0A0; b
 echo '<td><form action="bin/heatoff.sh" method="GET"><INPUT TYPE="submit" VALUE="Stop Heater"
 style="height:100px; width:300px;  font-size:30px; background-color:#A0F0F0; border-radius:25px; border:2px solid "white";" ></form></td>'
 echo "</tr><tr>"
-echo '<td><form action="bin/autodis.sh" method="GET"><INPUT TYPE="submit" VALUE="Disable Autocontrol"
+echo '<td><form action="bin/autodis.sh" method="GET"><INPUT TYPE="submit" VALUE="Disable Autoheat"
 style="height:100px; width:300px;    font-size:30px; background-color:#F0F0A0; border-radius:25px; border:2px solid "white";" ></form></td>'
-echo '<td><form action="bin/autoen.sh" method="GET"><INPUT TYPE="submit" VALUE="Enable Autocontrol"
+echo '<td><form action="bin/autoen.sh" method="GET"><INPUT TYPE="submit" VALUE="Enable Autoheat"
 style="height:100px; width:300px;    font-size:30px; background-color:#A0A0F0; border-radius:25px; border:2px solid "white";" ></form></td>'
 echo "</tr><tr>"
 echo '<td><form action="bin/ventoff.sh" method="GET"><INPUT TYPE="submit" VALUE="Stop Ventilation"
