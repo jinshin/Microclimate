@@ -20,3 +20,8 @@ plot.py - Graphs data.
 gen.sh - Generates web-page.
 
 micro-httpd.c - smallest http server. Not mine, i've just added basic GET form support. (/bin treated as a location with executables) 
+
+Prereqs:
+pip3 install smbus pyserial
+#I couldn't install numpy from source
+apt install python3-numpy python3-matplotlib
