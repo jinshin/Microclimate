@@ -93,6 +93,8 @@ def time_func():
   ax.ticklabel_format(style='plain', useOffset=False, axis='y')
   fig.autofmt_xdate(rotation=45)
   ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
+  ax.use_sticky_edges = True
+  ax.margins(x=0.01, y=0.02, tight=True)
   fig.savefig("/var/www/t.png", dpi=130)
   plt.cla()
 
@@ -103,6 +105,8 @@ def time_func():
   ax.ticklabel_format(style='plain', useOffset=False, axis='y')
   fig.autofmt_xdate(rotation=45)
   ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
+  ax.use_sticky_edges = True
+  ax.margins(x=0.01, y=0.02, tight=True)
   fig.savefig("/var/www/p.png", dpi=130)
   plt.cla()
 
@@ -113,6 +117,8 @@ def time_func():
   ax.ticklabel_format(style='plain', useOffset=False, axis='y')
   fig.autofmt_xdate(rotation=45)
   ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
+  ax.use_sticky_edges = True
+  ax.margins(x=0.01, y=0.02, tight=True)
   fig.savefig("/var/www/h.png", dpi=130)
   plt.cla()
 
@@ -123,6 +129,8 @@ def time_func():
   ax.ticklabel_format(style='plain', useOffset=False, axis='y')
   ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
   fig.autofmt_xdate(rotation=45)
+  ax.use_sticky_edges = True
+  ax.margins(x=0.01, y=0.02, tight=True)
   fig.savefig("/var/www/co2.png", dpi=130)
   plt.cla()
 
