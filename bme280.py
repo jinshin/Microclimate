@@ -14,13 +14,14 @@ dbglog  = "/var/log/bme"
 onflag = "/tmp/HEATON"
 offflag = "/tmp/HEATOFF"
 noauto = "/tmp/AUTOOFF"
+heating = "/tmp/heating"
 
 Night_Start = datetime.time(23,0,0)
 Day_Start = datetime.time(8,0,0)
 
 #Don't control heater on summer
 #MMDD
-Summer_Start = 501
+Summer_Start = 610
 Winter_Start = 901
 
 Min_Cycle = 10 #minutes heat minimum
@@ -35,7 +36,8 @@ Night_Temp_Max = 17.8
 Night_Temp_Min = 17.6
 Away_Temp_Max = 15.8
 Away_Temp_Min = 15.6
-Away_Level = 500 #Anything below considered nobody home
+#FixMe
+Away_Level = 300 #Anything below considered nobody home
 
 def log_console(data):
   global dbglog
@@ -182,6 +184,19 @@ def heater(on):
   if ((op_count % 10) != 0):
     log_console("Skip send")
     return
+
+  #Flag for LCD
+  if (on):
+    if not (os.path.isfile(heating)):
+      try:
+        tmp_file=open(heating, "w+")
+        tmp_file.write("1")
+        tmp_file.close()
+      except:
+        print ("Cannot write to temp data file")
+  else:
+    if (os.path.isfile(heating)):
+      os.remove(heating)
 
   global GPIO
 

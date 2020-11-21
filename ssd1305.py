@@ -1,9 +1,12 @@
-import os, smbus, sched, time, datetime, random, io
+import os, smbus, sched, time, datetime, random, io, threading, socket
 import OPi.GPIO as GPIO
 
 SSD1305 = 0x3C
 I2CNUM = 0
 i2cdev = 0
+
+UDP_IP = "192.168.0.140"
+UDP_PORT = 4000
 
 buffer = bytearray(128*34)
 framebuffer = bytearray(128*32>>3)
@@ -403,11 +406,32 @@ def time_func():
 
   #FPS print("FPS: ", 1.0 / (time.time() - start_time))
 
+def udprec():
+  global UDP_IP, UDP_PORT
+  global cdate,t,p,h,co2,heating
+  sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+  sock.bind((UDP_IP, UDP_PORT))
+  while True:
+    data, addr = sock.recvfrom(256)
+    if data[0:8] == b'climdata':
+      clim = data.decode().split(",")
+      cdate = datetime.datetime.fromtimestamp(float(clim[1]))
+      t = float(clim[2])
+      p = float(clim[3])
+      h = float(clim[4])
+      co2 = int(clim[5])
+      heating = bool(int(clim[6]))
+      #print (t,p,h,co2,clim[6],heating)
+  sock.close()
+
+UDP_REC = threading.Thread(target=udprec)
+UDP_REC.start()
+
 init_ssd1305()
 
 s = sched.scheduler(time.time, time.sleep)
 s.enter(1, 1, time_func, ())
-s.enter(1, 1, vals_func, ())
+#s.enter(1, 1, vals_func, ())
 s.run()
 
 while True:
