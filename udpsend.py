@@ -2,13 +2,14 @@ import os,socket,time,datetime,sched
 
 UDP_IP = "192.168.0.140"
 UDP_PORT = 4000
+ID = 1
 
 tph_file = "/tmp/tph"
 co2_file = "/tmp/co2level"
 heat_file = "/tmp/heating"
 
 def vals_func():
-  global tph_file, co2_file, heatfile
+  global tph_file, co2_file, heatfile, ID
   s.enter(30, 1, vals_func, ())
   #Get TPH
   try:
@@ -29,7 +30,7 @@ def vals_func():
   except:
     co2=800
   heating = os.path.isfile(heat_file)
-  sendstr = "climdata,%f,%f,%f,%f,%d,%d" % (time.mktime(cdate.timetuple()),t,p,h,int(co2),int(heating))
+  sendstr = "climdata,%f,%d,%f,%f,%f,%d,%d" % (time.mktime(cdate.timetuple()),ID,t,p,h,int(co2),int(heating))
   #print(sendstr)
   MESSAGE = str.encode(sendstr)
   sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -41,4 +42,3 @@ s.run()
 
 while True:
   time.sleep(1)
-

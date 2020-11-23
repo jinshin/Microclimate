@@ -26,6 +26,7 @@ t = 0
 p = 0
 h = 0
 co2 = 0
+id = 0
 
 def init_ssd1305():
 
@@ -408,7 +409,7 @@ def time_func():
 
 def udprec():
   global UDP_IP, UDP_PORT
-  global cdate,t,p,h,co2,heating
+  global cdate,t,p,h,co2,heating,id
   sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
   sock.bind((UDP_IP, UDP_PORT))
   while True:
@@ -416,12 +417,13 @@ def udprec():
     if data[0:8] == b'climdata':
       clim = data.decode().split(",")
       cdate = datetime.datetime.fromtimestamp(float(clim[1]))
-      t = float(clim[2])
-      p = float(clim[3])
-      h = float(clim[4])
-      co2 = int(clim[5])
-      heating = bool(int(clim[6]))
-      #print (t,p,h,co2,clim[6],heating)
+      id = int(clim[2])
+      t = float(clim[3])
+      p = float(clim[4])
+      h = float(clim[5])
+      co2 = int(clim[6])
+      heating = bool(int(clim[7]))
+      print (id,t,p,h,co2,clim[7],heating)
   sock.close()
 
 UDP_REC = threading.Thread(target=udprec)

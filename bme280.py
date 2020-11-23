@@ -24,18 +24,18 @@ Day_Start = datetime.time(8,0,0)
 Summer_Start = 610
 Winter_Start = 901
 
-Min_Cycle = 10 #minutes heat minimum
+Min_Cycle = 5 #minutes heat minimum
 Force_Cycle = 30 #Run heater when forced
 
 heat_counter = 0
 heat_op = 2       #1 - start, 0 - stop, 2 - not needed
 
-Day_Temp_Max = 18.9
-Day_Temp_Min = 18.7
-Night_Temp_Max = 17.8
-Night_Temp_Min = 17.6
-Away_Temp_Max = 15.8
-Away_Temp_Min = 15.6
+#Main Values, window - alowed deviation
+Day_Temp = 18.8
+Night_Temp = 17.8
+Away_Temp_Min = 15.8
+Temp_Window = 0.1
+
 #FixMe
 Away_Level = 300 #Anything below considered nobody home
 
@@ -264,7 +264,7 @@ def log_data(t,p,h):
 def time_func():
 #Once per minute
   global Min_Cycle, heat_counter, heat_op
-  global Day_Temp_Min, Day_Temp_Max, Night_Temp_Max, Night_Temp_Min, Away_Temp_Max, Away_Temp_Min, Away_Level
+  global Day_Temp, Night_Temp, Away_Temp, Away_Level, Temp_Window
   global last_op, op_count
   s.enter(60, 1, time_func, ())
   try:
@@ -321,14 +321,14 @@ def time_func():
     return
 
   if (is_night()):
-    t_min=Night_Temp_Min
-    t_max=Night_Temp_Max
+    t_min=Night_Temp-(Temp_Window/2)
+    t_max=Night_Temp+(Temp_Window/2)
   else:
-    t_min=Day_Temp_Min
-    t_max=Day_Temp_Max
+    t_min=Day_Temp-(Temp_Window/2)
+    t_max=Day_Temp+(Temp_Window/2)
   if (int(CO2LEVEL) < Away_Level):
-    t_min=Away_Temp_Min
-    t_max=Away_Temp_Max
+    t_min=Away_Temp-(Temp_Window/2)
+    t_max=Away_Temp+(Temp_Window/2)
   #Now, let's start/stop the heater
   if (t < t_min):
     heat_counter = Min_Cycle
