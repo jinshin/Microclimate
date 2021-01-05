@@ -33,7 +33,7 @@ heat_op = 2       #1 - start, 0 - stop, 2 - not needed
 #Main Values, window - alowed deviation
 Day_Temp = 18.8
 Night_Temp = 17.8
-Away_Temp_Min = 15.8
+Away_Temp = 15.8
 Temp_Window = 0.1
 
 #FixMe
